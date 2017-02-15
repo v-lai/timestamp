@@ -15,7 +15,7 @@ app.get("/", function(req, res){
 app.get("/:strDate", function(req, res){
   var strDate = req.params.strDate;
   checkFlag(strDate); // checks if input is unix timestamp (number) or natural language (letter)
-  
+
   if (flag){ // unix timestamp
     var date = new Date(strDate * 1000); // ms to sec
 
@@ -23,7 +23,7 @@ app.get("/:strDate", function(req, res){
     var mon = date.getUTCMonth();
     var year = date.getUTCFullYear();
 
-    return res.send("{ \"unix\": " + strDate + ", \"natural\": \"" + months[mon] + " " + day + ", " + year + "\" }");
+    return res.send(JSON.stringify({ unix: strDate, natural: months[mon] + " " + day + ", " + year }, null, '\t'));
   } else { // natural language
     var unixDate = new Date(strDate);
 
@@ -35,10 +35,10 @@ app.get("/:strDate", function(req, res){
     unixDate = Math.floor(unixDate/1000 - tzOffset * 60); // ms to sec and remove offset
 
     if (unixDate === undefined || months[mon] === undefined || day === undefined || year === undefined){
-      return res.send("{ \"unix\": null, \"natural\": null }");
+      return res.send(JSON.stringify({ unix: null, natural: null }, null, '\t'));
     }
 
-    return res.send("{ \"unix\": " + unixDate + ", \"natural\": \"" + months[mon] + " " + day + ", " + year + "\" }");
+    return res.send(JSON.stringify({ unix: unixDate, natural: months[mon] + " " + day + ", " + year }, null, '\t'));
   }
 });
 
