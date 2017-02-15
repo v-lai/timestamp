@@ -9,13 +9,13 @@ var months = [
 var flag = true; // true -> unix timestamp; false -> natural language
 
 app.get("/", function(req, res){
-  res.send('Timestamp microservice. Type a Unix timestamp (seconds) or natural language form of the date (MMM DD, YYYY).');
+  res.send('Timestamp microservice. \nType a Unix timestamp (seconds) or natural language form of the date (MMM DD, YYYY) after the current URL /yourInputHere.');
 });
 
 app.get("/:strDate", function(req, res){
   var strDate = req.params.strDate;
   checkFlag(strDate); // checks if input is unix timestamp (number) or natural language (letter)
-
+  
   if (flag){ // unix timestamp
     var date = new Date(strDate * 1000); // ms to sec
 
@@ -43,12 +43,11 @@ app.get("/:strDate", function(req, res){
 });
 
 app.get("*", function(req, res){
-  console.log("Page not found");
   res.send("Page not found.");
 });
 
 function checkFlag(str){
-  if (str[0] === /^[a-z]+/, 'i'){ // first input is a letter
+  if (/^\D/i.test(str)){ // first input is a letter
       return flag = false;
   }
   return flag = true; // first input is a number
